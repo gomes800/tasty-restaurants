@@ -1,6 +1,5 @@
 package com.gom.tasty_restaurants.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +14,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-public class User implements Serializable {
+@Table(name = "restaurants")
+public class Restaurant implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -24,10 +23,15 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserRestaurant> restaurants = new ArrayList<>()  ;
 
+    @Column(unique = true)
+    private String googlePlaceId;
+
+    private String name;
+    private String address;
+    private String phone;
+    private String site;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserRestaurant> userInteractions = new ArrayList<>();
 }
