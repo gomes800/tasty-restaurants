@@ -4,6 +4,7 @@ import com.gom.tasty_restaurants.dto.AuthenticationDTO;
 import com.gom.tasty_restaurants.dto.LoginResponseDTO;
 import com.gom.tasty_restaurants.dto.RegisterDTO;
 import com.gom.tasty_restaurants.model.User;
+import com.gom.tasty_restaurants.model.UserRole;
 import com.gom.tasty_restaurants.repositories.UserRepository;
 import com.gom.tasty_restaurants.services.TokenService;
 import jakarta.validation.Valid;
@@ -43,7 +44,7 @@ public class AuthenticationController {
         if (this.userRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.name(), data.login(), encryptedPassword);
+        User newUser = new User(data.name(), data.login(), encryptedPassword, UserRole.USER);
 
         userRepository.save(newUser);
 

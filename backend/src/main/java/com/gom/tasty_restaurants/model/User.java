@@ -31,18 +31,21 @@ public class User implements Serializable, UserDetails {
     private String name;
     private String login;
     private String password;
+    private UserRole role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRestaurant> restaurants = new ArrayList<>();
 
-    public User(String name, String login, String password) {
+    public User(String name, String login, String password, UserRole role) {
         this.name = name;
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
