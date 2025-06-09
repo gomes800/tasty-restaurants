@@ -22,8 +22,9 @@ public class UserRestaurant implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private byte rating;
+    private Integer rating;
     private boolean wasVisited;
+    private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
