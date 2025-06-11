@@ -1,5 +1,6 @@
 package com.gom.tasty_restaurants.controllers;
 
+import com.gom.tasty_restaurants.dto.UpdateUserDTO;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,9 +26,9 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
+    public ResponseEntity<User> update(@RequestBody UpdateUserDTO updateUserDTO) {
         try {
-            User updated = userService.update(user);
+            User updated = userService.update(updateUserDTO);
             return ResponseEntity.ok(updated);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

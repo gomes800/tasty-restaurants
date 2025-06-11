@@ -1,5 +1,6 @@
 package com.gom.tasty_restaurants.services;
 
+import com.gom.tasty_restaurants.dto.UpdateUserDTO;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,13 +24,13 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User user) {
+    public User update(UpdateUserDTO updateUserDTO) {
         Long userId = authenticatedUserService.getUserId();
 
         User existing = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
-        existing.setName(user.getName());
+        existing.setName(updateUserDTO.getName());
 
         return userRepository.save(existing);
     }
