@@ -1,7 +1,7 @@
 package com.gom.tasty_restaurants.services;
 
 import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
-import com.gom.tasty_restaurants.dto.UpdateUserRestaurantResponseDTO;
+import com.gom.tasty_restaurants.dto.UpdateUserRestaurantDTO;
 import com.gom.tasty_restaurants.dto.UserRestaurantResponseDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.model.User;
@@ -73,7 +73,7 @@ public class UserRestaurantService {
     }
 
     @Transactional
-    public UserRestaurant updateUserRestaurant(Long userRestaurantId, UpdateUserRestaurantResponseDTO updateDto) {
+    public UserRestaurantResponseDTO updateUserRestaurant(Long userRestaurantId, UpdateUserRestaurantDTO dto) {
         Long userId = authenticatedUserService.getUserId();
 
         UserRestaurant existing = userRestaurantRepository.findById(userRestaurantId)
@@ -83,24 +83,45 @@ public class UserRestaurantService {
             throw new SecurityException("Cannot update another user's relation.");
         }
 
-        if (updateDto.getRating() != null) existing.setRating(updateDto.getRating());
-        if (updateDto.getComment() != null) existing.setComment(updateDto.getComment());
-        if (updateDto.getWasVisited() != null) existing.setWasVisited(updateDto.getWasVisited());
-        if (updateDto.getPhotoUrl() != null) existing.setPhotoUrl(updateDto.getPhotoUrl());
+        if (dto.getRating() != null) {
+            if (dto.getRating() < 0 || dto.getRating() > 5) {
+                throw new IllegalArgumentException("Rating must be between 0 and 5.");
+            }
+            existing.setRating(dto.getRating());
+        }
+        if (dto.getComment() != null) existing.setComment(dto.getComment());
+        if (dto.getWasVisited() != null) existing.setWasVisited(dto.getWasVisited());
+        if (dto.getPhotoUrl() != null) existing.setPhotoUrl(dto.getPhotoUrl());
 
-        return userRestaurantRepository.save(existing);
+        UserRestaurant saved = userRestaurantRepository.save(existing);
+
+        UserRestaurantResponseDTO response = new UserRestaurantResponseDTO();
+        response.setId(saved.getId());
+        response.setRestaurantName(saved.getRestaurant().getName());
+        response.setRating(saved.getRating());
+        response.setWasVisited(saved.isWasVisited());
+        response.setComment(saved.getComment());
+        response.setPhotoUrl(saved.getPhotoUrl());
+
+        return response;
     }
 
     @Transactional
     public void addRating(Long userRestaurantId,Integer rating) {
+        if (rating == null || rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 0 and 5.");
+        }
+
+        Long userId = authenticatedUserService.getUserId();
+
         UserRestaurant restaurant = userRestaurantRepository.findById(userRestaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Relation not found"));
 
-        if (rating != null && (rating >=0 && rating <= 5)) {
-            restaurant.setRating(rating);
-            userRestaurantRepository.save(restaurant);
-        } else {
-            throw new IllegalArgumentException("Rating must be between 0 and 5.");
+        if (!restaurant.getUser().getId().equals(userId)) {
+            throw new SecurityException("You can only rate your own restaurant relation.");
         }
+
+        restaurant.setRating(rating);
+        userRestaurantRepository.save(restaurant);
     }
 }

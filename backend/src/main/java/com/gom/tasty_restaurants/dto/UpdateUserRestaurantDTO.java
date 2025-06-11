@@ -3,7 +3,7 @@ package com.gom.tasty_restaurants.dto;
 import lombok.Data;
 
 @Data
-public class UpdateUserRestaurantResponseDTO {
+public class UpdateUserRestaurantDTO {
     private Integer rating;
     private Boolean wasVisited;
     private String comment;
