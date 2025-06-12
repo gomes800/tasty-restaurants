@@ -13,4 +13,6 @@ public interface UserRestaurantRepository extends JpaRepository<UserRestaurant, 
 
     List<UserRestaurant> findAllByUserId(Long userId);
 
+    boolean existsByIdAndUserId(Long userRestaurantId, Long userId);
+
 }
