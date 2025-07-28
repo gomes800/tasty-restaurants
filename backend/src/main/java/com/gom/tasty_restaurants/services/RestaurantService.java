@@ -1,5 +1,7 @@
 package com.gom.tasty_restaurants.services;
 
+import com.gom.tasty_restaurants.dto.CreateRestaurantDTO;
+import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,14 @@ public class RestaurantService {
         return restaurantRepository.findById(restaurantId);
     }
 
-    public Restaurant createRestaurant(Restaurant restaurant) {
+    public Restaurant createRestaurant(CreateRestaurantDTO dto) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName(dto.getName());
+        restaurant.setAddress(dto.getAddress());
+        restaurant.setPhone(dto.getPhone());
+        restaurant.setSite(dto.getSite());
+        restaurant.setPhotoUrl(dto.getPhotoUrl());
+
         return restaurantRepository.save(restaurant);
     }
 

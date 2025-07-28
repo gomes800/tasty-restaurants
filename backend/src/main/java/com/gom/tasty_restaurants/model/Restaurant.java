@@ -31,7 +31,16 @@ public class Restaurant implements Serializable {
     private String address;
     private String phone;
     private String site;
+    private String photoUrl;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRestaurant> userInteractions = new ArrayList<>();
+
+    public Restaurant(String name, String address, String phone, String site, String photoUrl) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.site = site;
+        this.photoUrl = photoUrl;
+    }
 }

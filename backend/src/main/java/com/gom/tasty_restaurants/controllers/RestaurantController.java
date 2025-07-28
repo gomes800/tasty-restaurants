@@ -1,5 +1,6 @@
 package com.gom.tasty_restaurants.controllers;
 
+import com.gom.tasty_restaurants.dto.CreateRestaurantDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,9 @@ public class RestaurantController {
     }
 
     @PostMapping("/create-restaurant")
-    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
-        Restaurant newRestaurant = restaurantService.createRestaurant(restaurant);
+    public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantDTO restaurantDTO) {
+        Restaurant newRestaurant = restaurantService.createRestaurant(restaurantDTO);
+
         return new ResponseEntity<>(newRestaurant, HttpStatus.CREATED);
     }
 }
