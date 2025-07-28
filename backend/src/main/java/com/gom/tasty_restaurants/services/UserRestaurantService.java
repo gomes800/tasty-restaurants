@@ -47,7 +47,6 @@ public class UserRestaurantService {
     }
 
     @Transactional
-    @PreAuthorize("#createUserRestaurantDTO.userId == @authenticatedUserService.getUserId()")
     public UserRestaurant linkUserToRestaurant(@Valid CreateUserRestaurantDTO dto) {
         Long userId = authenticatedUserService.getUserId();
         User user = userService.findById(userId)

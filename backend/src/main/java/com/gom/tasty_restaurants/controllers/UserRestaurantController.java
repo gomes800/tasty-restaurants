@@ -26,7 +26,7 @@ public class UserRestaurantController {
     }
 
     @PostMapping("/link-restaurant")
-    public ResponseEntity<UserRestaurantResponseDTO> linkUserToRestaurant(CreateUserRestaurantDTO dto) {
+    public ResponseEntity<UserRestaurantResponseDTO> linkUserToRestaurant(@RequestBody CreateUserRestaurantDTO dto) {
         UserRestaurant relation = userRestaurantService.linkUserToRestaurant(dto);
 
         UserRestaurantResponseDTO response = new UserRestaurantResponseDTO();
