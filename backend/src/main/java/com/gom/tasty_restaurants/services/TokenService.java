@@ -22,7 +22,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
-                    .withIssuer("money-help")
+                    .withIssuer("tasty-restaurants")
                     .withSubject(user.getLogin())
                     .withClaim("userId", user.getId())
                     .withExpiresAt(genExpirationDate())

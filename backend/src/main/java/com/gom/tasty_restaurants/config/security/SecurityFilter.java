@@ -1,5 +1,6 @@
 package com.gom.tasty_restaurants.config.security;
 
+import com.gom.tasty_restaurants.services.AuthorizationService;
 import com.gom.tasty_restaurants.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,19 +20,22 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    AuthorizationService authorizationService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
 
         if (token != null) {
             var login = tokenService.validateToken(token);
-            var userId = tokenService.getUserIdFromToken(token);
 
-            if (login != null && userId != null) {
+            if (login != null) {
+                var user = authorizationService.loadUserByUsername(login);
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        login,
-                        userId,
-                        null
+                        user,
+                        null,
+                        user.getAuthorities()
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
