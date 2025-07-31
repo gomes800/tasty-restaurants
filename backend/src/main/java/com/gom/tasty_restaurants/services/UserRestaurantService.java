@@ -2,6 +2,7 @@ package com.gom.tasty_restaurants.services;
 
 import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
 import com.gom.tasty_restaurants.dto.UpdateUserRestaurantDTO;
+import com.gom.tasty_restaurants.dto.UserRestaurantCardDTO;
 import com.gom.tasty_restaurants.dto.UserRestaurantResponseDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.model.User;
@@ -31,16 +32,27 @@ public class UserRestaurantService {
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
 
-    public List<UserRestaurantResponseDTO> showAllUserRestaurants() {
+    public List<UserRestaurantCardDTO> getUserRestaurants() {
         Long userId = authenticatedUserService.getUserId();
         return userRestaurantRepository.findAllByUserId(userId)
                 .stream()
                 .map(relation -> {
-                    UserRestaurantResponseDTO dto = new UserRestaurantResponseDTO();
-                    dto.setRestaurantName(relation.getRestaurant().getName());
-                    dto.setComment(relation.getComment());
+
+                    Restaurant r = relation.getRestaurant();
+
+                    UserRestaurantCardDTO dto = new UserRestaurantCardDTO();
+                    dto.setUserRestaurantId(relation.getId());
+                    dto.setRestaurantId(r.getId());
+                    dto.setRestaurantName(r.getName());
+                    dto.setAddress(r.getAddress());
+                    dto.setPhone(r.getPhone());
+                    dto.setSite(r.getSite());
+                    dto.setRestaurantPhotoUrl(r.getPhotoUrl());
+                    dto.setUserPhotoUrl(relation.getPhotoUrl());
                     dto.setRating(relation.getRating());
+                    dto.setComment(relation.getComment());
                     dto.setWasVisited(relation.isWasVisited());
+
                     return dto;
                 })
                 .toList();

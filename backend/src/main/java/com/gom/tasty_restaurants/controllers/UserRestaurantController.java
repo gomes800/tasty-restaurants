@@ -2,6 +2,7 @@ package com.gom.tasty_restaurants.controllers;
 
 import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
 import com.gom.tasty_restaurants.dto.UpdateUserRestaurantDTO;
+import com.gom.tasty_restaurants.dto.UserRestaurantCardDTO;
 import com.gom.tasty_restaurants.dto.UserRestaurantResponseDTO;
 import com.gom.tasty_restaurants.model.UserRestaurant;
 import com.gom.tasty_restaurants.services.UserRestaurantService;
@@ -18,9 +19,9 @@ public class UserRestaurantController {
     @Autowired
     private UserRestaurantService userRestaurantService;
 
-    @GetMapping
-    public ResponseEntity<List<UserRestaurantResponseDTO>> showAllUserRestaurants() {
-        List<UserRestaurantResponseDTO> restaurants = userRestaurantService.showAllUserRestaurants();
+    @GetMapping("/restaurants")
+    public ResponseEntity<List<UserRestaurantCardDTO>> getUserRestaurants() {
+        List<UserRestaurantCardDTO> restaurants = userRestaurantService.getUserRestaurants();
 
         return ResponseEntity.ok(restaurants);
     }
