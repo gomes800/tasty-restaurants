@@ -1,6 +1,8 @@
 package com.gom.tasty_restaurants.controllers;
 
 import com.gom.tasty_restaurants.dto.CreateRestaurantDTO;
+import com.gom.tasty_restaurants.dto.RestaurantResponseDTO;
+import com.gom.tasty_restaurants.dto.UpdateRestaurantDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,26 @@ public class RestaurantController {
     }
 
     @PostMapping("/create-restaurant")
-    public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantDTO restaurantDTO) {
-        Restaurant newRestaurant = restaurantService.createRestaurant(restaurantDTO);
+    public ResponseEntity<RestaurantResponseDTO> createRestaurant(@RequestBody CreateRestaurantDTO restaurantDTO) {
+        RestaurantResponseDTO newRestaurant = restaurantService.createRestaurant(restaurantDTO);
 
         return new ResponseEntity<>(newRestaurant, HttpStatus.CREATED);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
+            @PathVariable Long id,
+            @RequestBody UpdateRestaurantDTO dto
+    ) {
+        RestaurantResponseDTO updated = restaurantService.updateRestaurant(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id) {
+        restaurantService.deleteRestaurant(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

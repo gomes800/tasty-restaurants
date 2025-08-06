@@ -1,5 +1,6 @@
 package com.gom.tasty_restaurants.model;
 
+import com.gom.tasty_restaurants.dto.CreateRestaurantDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,10 @@ public class Restaurant implements Serializable {
     @Column(unique = true)
     private String googlePlaceId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
     private String name;
     private String address;
     private String phone;
@@ -42,5 +47,14 @@ public class Restaurant implements Serializable {
         this.phone = phone;
         this.site = site;
         this.photoUrl = photoUrl;
+    }
+
+    public Restaurant(CreateRestaurantDTO dto, User createdBy) {
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+        this.phone = dto.getPhone();
+        this.site = dto.getSite();
+        this.photoUrl = dto.getPhotoUrl();
+        this.createdBy = createdBy;
     }
 }
