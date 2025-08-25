@@ -1,6 +1,6 @@
 package com.gom.tasty_restaurants.controllers;
 
-import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
+import com.gom.tasty_restaurants.dto.CreateUserRestaurantRelationDTO;
 import com.gom.tasty_restaurants.dto.UpdateUserRestaurantDTO;
 import com.gom.tasty_restaurants.dto.UserRestaurantCardDTO;
 import com.gom.tasty_restaurants.dto.UserRestaurantResponseDTO;
@@ -27,7 +27,7 @@ public class UserRestaurantController {
     }
 
     @PostMapping("/link-restaurant")
-    public ResponseEntity<UserRestaurantResponseDTO> linkUserToRestaurant(@RequestBody CreateUserRestaurantDTO dto) {
+    public ResponseEntity<UserRestaurantResponseDTO> linkUserToRestaurant(@RequestBody CreateUserRestaurantRelationDTO dto) {
         UserRestaurant relation = userRestaurantService.linkUserToRestaurant(dto);
 
         UserRestaurantResponseDTO response = new UserRestaurantResponseDTO();

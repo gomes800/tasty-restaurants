@@ -1,9 +1,6 @@
 package com.gom.tasty_restaurants.services;
 
-import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
-import com.gom.tasty_restaurants.dto.UpdateUserRestaurantDTO;
-import com.gom.tasty_restaurants.dto.UserRestaurantCardDTO;
-import com.gom.tasty_restaurants.dto.UserRestaurantResponseDTO;
+import com.gom.tasty_restaurants.dto.*;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.model.UserRestaurant;
@@ -59,7 +56,7 @@ public class UserRestaurantService {
     }
 
     @Transactional
-    public UserRestaurant linkUserToRestaurant(@Valid CreateUserRestaurantDTO dto) {
+    public UserRestaurant linkUserToRestaurant(@Valid CreateUserRestaurantRelationDTO dto) {
         Long userId = authenticatedUserService.getUserId();
         User user = userService.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));

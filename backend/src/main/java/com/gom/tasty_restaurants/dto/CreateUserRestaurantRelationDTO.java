@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CreateUserRestaurantDTO {
+public class CreateUserRestaurantRelationDTO {
 
     private Long restaurantId;
     @Min(0)@Max(5) private Integer rating;

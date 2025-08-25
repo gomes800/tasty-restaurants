@@ -1,19 +1,16 @@
 package com.gom.tasty_restaurants.services;
 
 import com.gom.tasty_restaurants.dto.CreateRestaurantDTO;
-import com.gom.tasty_restaurants.dto.CreateUserRestaurantDTO;
 import com.gom.tasty_restaurants.dto.RestaurantResponseDTO;
-import com.gom.tasty_restaurants.dto.UpdateRestaurantDTO;
 import com.gom.tasty_restaurants.model.Restaurant;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.repositories.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,15 +46,10 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantResponseDTO updateRestaurant(Long id, UpdateRestaurantDTO dto) {
-        Long userId = authenticatedUserService.getUserId();
-
+    @PreAuthorize("@restaurantSecurity.isCreator(#id)")
+    public RestaurantResponseDTO updateRestaurant(Long id, CreateRestaurantDTO dto) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado"));
-
-        if (!restaurant.getCreatedBy().getId().equals(userId)) {
-            throw new AccessDeniedException("Você não tem permissão para editar este restaurante.");
-        }
 
         if (dto.getName() != null) restaurant.setName(dto.getName());
         if (dto.getAddress() != null) restaurant.setAddress(dto.getAddress());
@@ -71,15 +63,10 @@ public class RestaurantService {
     }
 
     @Transactional
+    @PreAuthorize("@restaurantSecurity.isCreator(#id)")
     public void deleteRestaurant(Long id) {
-        Long userId = authenticatedUserService.getUserId();
-
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado"));
-
-        if (!restaurant.getCreatedBy().getId().equals(userId)) {
-            throw new AccessDeniedException("Você não tem permissão para deletar este restaurante.");
-        }
 
         restaurantRepository.delete(restaurant);
     }
