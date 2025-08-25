@@ -6,6 +6,7 @@ import com.gom.tasty_restaurants.dto.RegisterDTO;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.model.UserRole;
 import com.gom.tasty_restaurants.repositories.UserRepository;
+import com.gom.tasty_restaurants.services.AuthenticationService;
 import com.gom.tasty_restaurants.services.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenService tokenService;
+    private AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-        var loginPassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = this.authenticationManager.authenticate(loginPassword);
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
+        LoginResponseDTO response = authenticationService.login(data);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
-        if (this.userRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.name(), data.login(), encryptedPassword, UserRole.USER);
-
-        userRepository.save(newUser);
-
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
+        authenticationService.register(data);
         return ResponseEntity.ok().build();
     }
 }
