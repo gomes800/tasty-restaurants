@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -23,8 +24,22 @@ public class RestaurantService {
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
 
-    public List<Restaurant> findAll() {
-        return restaurantRepository.findAll();
+    public List<RestaurantResponseDTO> findAll() {
+        return restaurantRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private RestaurantResponseDTO convertToDTO(Restaurant restaurant) {
+        RestaurantResponseDTO dto = new RestaurantResponseDTO();
+        dto.setId(restaurant.getId());
+        dto.setName(restaurant.getName());
+        dto.setAddress(restaurant.getAddress());
+        dto.setPhone(restaurant.getPhone());
+        dto.setSite(restaurant.getSite());
+        dto.setPhotoUrl(restaurant.getPhotoUrl());
+
+        return dto;
     }
 
     public Optional<Restaurant> findById(Long restaurantId) {

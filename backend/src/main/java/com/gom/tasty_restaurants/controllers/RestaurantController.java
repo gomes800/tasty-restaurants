@@ -20,8 +20,8 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @GetMapping
-    public List<Restaurant> findAll() {
-        return restaurantService.findAll();
+    public ResponseEntity<List<RestaurantResponseDTO>> findAll() {
+        return ResponseEntity.ok(restaurantService.findAll());
     }
 
     @GetMapping("/{id}")

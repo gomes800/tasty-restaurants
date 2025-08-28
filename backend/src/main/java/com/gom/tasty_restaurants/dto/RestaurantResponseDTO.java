@@ -2,8 +2,10 @@ package com.gom.tasty_restaurants.dto;
 
 import com.gom.tasty_restaurants.model.Restaurant;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class RestaurantResponseDTO {
     private Long id;
     private String name;
