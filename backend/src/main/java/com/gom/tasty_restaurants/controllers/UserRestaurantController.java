@@ -54,4 +54,10 @@ public class UserRestaurantController {
         userRestaurantService.addRating(userRestaurantId, rating);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{userRestaurantId}")
+    public ResponseEntity<Void> deleteUserRestaurant(@PathVariable Long userRestaurantId) {
+        userRestaurantService.deleteUserRestaurant(userRestaurantId);
+        return ResponseEntity.noContent().build();
+    }
 }
