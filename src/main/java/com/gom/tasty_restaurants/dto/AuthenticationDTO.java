@@ -1,4 +1,11 @@
 package com.gom.tasty_restaurants.dto;
 
-public record AuthenticationDTO(String login, String password) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class AuthenticationDTO {
+    private String login;
+    private String password;
 }

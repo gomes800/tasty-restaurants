@@ -30,7 +30,7 @@ public class RestaurantController {
         return restaurant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create-restaurant")
+    @PostMapping()
     public ResponseEntity<RestaurantResponseDTO> createRestaurant(@RequestBody CreateRestaurantDTO restaurantDTO) {
         RestaurantResponseDTO newRestaurant = restaurantService.createRestaurant(restaurantDTO);
 

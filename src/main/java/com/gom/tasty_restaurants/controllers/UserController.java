@@ -25,7 +25,7 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping
+    @PutMapping()
     public ResponseEntity<User> update(@RequestBody UpdateUserDTO updateUserDTO) {
         try {
             User updated = userService.update(updateUserDTO);

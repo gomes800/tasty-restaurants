@@ -6,7 +6,6 @@ import com.gom.tasty_restaurants.dto.RegisterDTO;
 import com.gom.tasty_restaurants.model.User;
 import com.gom.tasty_restaurants.model.UserRole;
 import com.gom.tasty_restaurants.repositories.UserRepository;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,19 +29,19 @@ public class AuthenticationService {
     }
 
     public LoginResponseDTO login(AuthenticationDTO data) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getPassword());
         var authentication = authenticationManager.authenticate(authenticationToken);
         var token = tokenService.generateToken((User) authentication.getPrincipal());
         return new LoginResponseDTO(token);
     }
 
     public void register(RegisterDTO data) {
-        if (userRepository.findByLogin(data.login()) != null) {
+        if (userRepository.findByLogin(data.getLogin()) != null) {
             throw new RuntimeException("Usuário já existe");
         }
 
-        String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(data.name(), data.login(), encryptedPassword, UserRole.USER);
+        String encryptedPassword = passwordEncoder.encode(data.getPassword());
+        User newUser = new User(data.getName(), data.getLogin(), encryptedPassword, UserRole.USER);
         userRepository.save(newUser);
     }
 }

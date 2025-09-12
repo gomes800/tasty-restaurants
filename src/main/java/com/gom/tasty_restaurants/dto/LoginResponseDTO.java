@@ -1,4 +1,10 @@
 package com.gom.tasty_restaurants.dto;
 
-public record LoginResponseDTO(String token) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class LoginResponseDTO {
+    private String token;
 }
