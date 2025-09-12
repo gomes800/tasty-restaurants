@@ -35,8 +35,6 @@ public class RestaurantService {
         dto.setId(restaurant.getId());
         dto.setName(restaurant.getName());
         dto.setAddress(restaurant.getAddress());
-        dto.setPhone(restaurant.getPhone());
-        dto.setSite(restaurant.getSite());
         dto.setPhotoUrl(restaurant.getPhotoUrl());
 
         return dto;
@@ -68,8 +66,6 @@ public class RestaurantService {
 
         if (dto.getName() != null) restaurant.setName(dto.getName());
         if (dto.getAddress() != null) restaurant.setAddress(dto.getAddress());
-        if (dto.getPhone() != null) restaurant.setPhone(dto.getPhone());
-        if (dto.getSite() != null) restaurant.setSite(dto.getSite());
         if (dto.getPhotoUrl() != null) restaurant.setPhotoUrl(dto.getPhotoUrl());
 
         restaurantRepository.save(restaurant);
